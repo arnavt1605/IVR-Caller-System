@@ -15,12 +15,13 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_FROM_NUMBER')
-CALLBACK_URL = os.getenv('CALLBACK_URL')
+CALLBACK_URL = os.getenv('CALLBACK_URL')  # e.g. https://abcd1234.ngrok.io
 
 twilio_client = TwilioClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key')
+
 
 @app.route('/call_bplus_donors', methods=['POST'])
 def call_bplus_donors():
@@ -31,9 +32,9 @@ def call_bplus_donors():
 
     for donor in donors:
         phone = str(donor['Phone_Number'])
-        
         if not phone.startswith('+'):
             phone = '+' + phone
+
         try:
             call = twilio_client.calls.create(
                 url=f"{CALLBACK_URL}/voice",
@@ -46,25 +47,27 @@ def call_bplus_donors():
 
     return jsonify({"status": "calls initiated", "count": len(donors)}), 200
 
+
 @app.route('/voice', methods=['POST', 'GET'])
 def voice():
-    response = """<?xml version='1.0' encoding='UTF-8'?>
+    gather_url = f"{CALLBACK_URL}/process"
+    response = f"""<?xml version='1.0' encoding='UTF-8'?>
     <Response>
         <Say>This is an urgent request for blood donation. If you are available to donate, press 1. Otherwise, you may hang up.</Say>
-        <Gather action="/process" method="POST" numDigits="1">
+        <Gather action="{gather_url}" method="POST" numDigits="1">
             <Say>Please press 1 to confirm your availability.</Say>
         </Gather>
         <Say>No input received. Goodbye!</Say>
     </Response>"""
     return Response(response, mimetype='text/xml')
 
+
 @app.route('/process', methods=['POST', 'GET'])
 def process():
     digit = request.values.get('Digits', '')
     from_number = request.values.get('From', '')
 
-    # Remove '+' if your DB stores numbers without '+'
-    phone_number = from_number.lstrip('+')
+    phone_number = from_number.lstrip('+')  # Adjust based on how your DB stores numbers
 
     if digit == '1':
         donor_resp = supabase.table('donors').select('*').eq('Phone_Number', phone_number).execute()
@@ -81,7 +84,9 @@ def process():
             }).execute()
             if hasattr(insert_resp, 'error') and insert_resp.error:
                 print(f"Insert error: {insert_resp.error}")
+
             supabase.table('donors').delete().eq('Donor_ID', donor['Donor_ID']).execute()
+
             response = """<?xml version='1.0' encoding='UTF-8'?>
             <Response>
                 <Say>Thank you for confirming. We appreciate your help. Goodbye!</Say>
@@ -96,7 +101,9 @@ def process():
         <Response>
             <Say>No confirmation received. Goodbye!</Say>
         </Response>"""
+
     return Response(response, mimetype='text/xml')
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
