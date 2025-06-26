@@ -1,13 +1,12 @@
 from dotenv import load_dotenv
-from supabase import create_client, Client
-from flask import Flask, render_template, request, redirect, session, url_for, jsonify, Response
-from twilio.rest import Client
-
+from supabase import create_client
+from flask import Flask, request, jsonify, Response
+from twilio.rest import Client as TwilioClient
 import os
 
 load_dotenv()
 
-#supabase setup
+# Supabase setup
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -16,20 +15,15 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_FROM_NUMBER')
-CALLBACK_URL= os.getenv('CALLBACK_URL')
+CALLBACK_URL = os.getenv('CALLBACK_URL')
 
+twilio_client = TwilioClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-twilio_client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-response = supabase.table('donors').select('Name, Phone_Number').eq('Blood_Group', 'B+').execute()
-donors_b_plus = response.data
-
-app=Flask(__name__)
-
+app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key')
 
 @app.route('/call_bplus_donors', methods=['POST'])
 def call_bplus_donors():
-
     response = supabase.table('donors').select('*').eq('Blood_Group', 'B+').execute()
     donors = response.data
     if not donors:
@@ -37,12 +31,12 @@ def call_bplus_donors():
 
     for donor in donors:
         phone = str(donor['Phone_Number'])
-       
+        
         if not phone.startswith('+'):
-            phone = '+' + phone  
+            phone = '+' + phone
         try:
             call = twilio_client.calls.create(
-                url=f"{CALLBACK_URL}/call_bplus_donors",
+                url=f"{CALLBACK_URL}/voice",
                 to=phone,
                 from_=TWILIO_PHONE_NUMBER
             )
@@ -54,7 +48,6 @@ def call_bplus_donors():
 
 @app.route('/voice', methods=['POST', 'GET'])
 def voice():
-    
     response = """<?xml version='1.0' encoding='UTF-8'?>
     <Response>
         <Say>This is an urgent request for blood donation. If you are available to donate, press 1. Otherwise, you may hang up.</Say>
@@ -67,24 +60,18 @@ def voice():
 
 @app.route('/process', methods=['POST', 'GET'])
 def process():
-
     digit = request.values.get('Digits', '')
     from_number = request.values.get('From', '')
 
-    
+    # Remove '+' if your DB stores numbers without '+'
     phone_number = from_number.lstrip('+')
-    try:
-        phone_number = int(phone_number)
-    except ValueError:
-        return Response("<Response><Say>Invalid phone number. Goodbye!</Say></Response>", mimetype='text/xml')
 
     if digit == '1':
-        # Find donor by phone number
         donor_resp = supabase.table('donors').select('*').eq('Phone_Number', phone_number).execute()
         donor = donor_resp.data[0] if donor_resp.data else None
+
         if donor:
-            # Insert into confirmed_donors
-            supabase.table('confirmed_donors').insert({
+            insert_resp = supabase.table('confirmed_donors').insert({
                 'Name': donor['Name'],
                 'Age': donor['Age'],
                 'Blood_Group': donor['Blood_Group'],
@@ -92,7 +79,8 @@ def process():
                 'DOB': donor['DOB'],
                 'Location': donor['Location']
             }).execute()
-            # Optionally delete from donors
+            if hasattr(insert_resp, 'error') and insert_resp.error:
+                print(f"Insert error: {insert_resp.error}")
             supabase.table('donors').delete().eq('Donor_ID', donor['Donor_ID']).execute()
             response = """<?xml version='1.0' encoding='UTF-8'?>
             <Response>
@@ -109,7 +97,6 @@ def process():
             <Say>No confirmation received. Goodbye!</Say>
         </Response>"""
     return Response(response, mimetype='text/xml')
-
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
