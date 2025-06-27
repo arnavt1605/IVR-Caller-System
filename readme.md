@@ -8,4 +8,4 @@
 2. Run ngrok server
 3. Copy ngrok url to .env file
 4. Close app.py and run again
-5. Use postman to send http request to /call_bplus_donors
+5. Use postman to send http request to /call_bplus_donors (post request)
