@@ -23,7 +23,7 @@ twilio_client = TwilioClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key')
 
-# Global variable to track request info
+# Global to track current request
 recent_request = {}
 
 @app.route('/call_donors', methods=['POST'])
@@ -63,10 +63,10 @@ def call_donors():
             )
             print(f"[CALL] {donor['Name']} ({blood_group}) at {phone}: {call.sid}")
             supabase.table("call_logs").insert({
-                "donor_id": donor["Donor_ID"],
-                "phone": phone,
+                "phone_number": phone,
+                "donor_name": donor["Name"],
                 "call_sid": call.sid,
-                "status": "initiated"
+                "call_status": "initiated"
             }).execute()
         except Exception as e:
             print(f"[ERROR] Call failed for {phone}: {e}")
@@ -122,9 +122,9 @@ def process():
 
 @app.route('/status', methods=['POST'])
 def status():
-    from_number = request.values.get('To', '')   ################## 
+    from_number = request.values.get('To', '')
     call_status = request.values.get('CallStatus')
-    print(f"[STATUS] Call to +{from_number} ended with status: {call_status}")
+    print(f"[STATUS] Call to {from_number} ended with status: {call_status}")
 
     if call_status == 'completed':
         global recent_request
