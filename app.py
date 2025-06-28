@@ -100,8 +100,6 @@ def process():
         'Location': donor['Location']
     }).execute()
 
-    # Delete from donors
-    supabase.table('donors').delete().eq('Donor_ID', donor['Donor_ID']).execute()
 
     print(f"Donor {donor['Name']} confirmed and moved to confirmed_donors.")
 
