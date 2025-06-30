@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from supabase import create_client
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template, redirect, session
 from twilio.rest import Client as TwilioClient
 from concurrent.futures import ThreadPoolExecutor
 import os
@@ -25,6 +25,53 @@ app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key')
 
 # Global to track current request
 recent_request = {}
+
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+
+@app.route('/register', methods=['GET'])
+def show_register_form():
+    return render_template('register.html')
+
+
+@app.route('/register_donor', methods=['POST'])
+def register_donor():
+    name = request.form.get('name')
+    age = request.form.get('age')
+    blood_group = request.form.get('blood_group')
+    phone = request.form.get('phone')
+    dob = request.form.get('dob')
+    location = request.form.get('location')
+
+    # Check required fields
+    if not all([name, age, blood_group, phone, dob, location]):
+        return "Missing fields", 400
+
+    try:
+        response = supabase.table('donors').insert({
+            "Name": name,
+            "Age": int(age),
+            "Blood_Group": blood_group,
+            "Phone_Number": int(phone),
+            "DOB": dob,
+            "Location": location
+        }).execute()
+
+        print(f"[REGISTERED] {name} added to donors.")
+        return redirect('/thanks')  # Redirect to thank you page after registration
+
+    except Exception as e:
+        print(f"[ERROR] Failed to register donor: {e}")
+        return "Something went wrong", 500
+    
+
+@app.route('/thanks')
+def thanks():
+    return render_template('thanks.html')
+
+
 
 @app.route('/call_donors', methods=['POST'])
 def call_donors():
