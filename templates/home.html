@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blood Donor IVR System</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/dist/css/bootstrap.min.css') }}">
+  
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #ffe0e0, #fff6f6);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .glass-card img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    .glass-card h1 {
+      font-weight: 700;
+      color: #b30000;
+      margin-bottom: 10px;
+    }
+
+    .glass-card p {
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .glass-card .btn {
+      border-radius: 30px;
+      padding: 12px 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .glass-card .btn-outline-danger:hover {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .glass-card .btn-danger:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <div class="glass-card">
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+
+    <h1>Blood Donor IVR System</h1>
+    <p>Connecting hospitals with life-saving donors instantly.</p>
+
+    <div class="d-grid gap-3">
+      <a href="/admin/login" class="btn btn-outline-danger btn-lg">Admin Login</a>
+      <a href="/register" class="btn btn-danger btn-lg">Donor Registration</a>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="{{ url_for('static', filename='bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You</title>
+  <link rel="stylesheet" href="/static/node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f6f7fb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .thank-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(60,64,67,.10);
+      padding: 40px 32px 32px 32px;
+      max-width: 400px;
+      width: 100%;
+      border: 1.5px solid #e4e6eb;
+      text-align: center;
+    }
+    .thank-icon {
+      font-size: 3.2rem;
+      margin-bottom: 12px;
+      color: #d7263d;
+      display: inline-block;
+    }
+    .thank-title {
+      color: #d7263d;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .thank-desc {
+      color: #555;
+      font-size: 1.08rem;
+      margin-bottom: 28px;
+    }
+    .btn-solid {
+      background-color: #d7263d;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      border: none;
+      width: 100%;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(215,38,61,0.10);
+    }
+    .btn-solid:hover {
+      background-color: #b71c2b;
+    }
+    @media (max-width: 600px) {
+      .thank-card {
+        padding: 22px 4vw;
+      }
+      .thank-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="thank-card">
+    <div class="thank-icon">🎉</div>
+    <div class="thank-title">Thank You!</div>
+    <div class="thank-desc">Your registration has been received.<br>We'll contact you when needed.</div>
+    <a href="/" class="btn btn-solid">Back to Home</a>
+  </div>
+</body>
+</html>
