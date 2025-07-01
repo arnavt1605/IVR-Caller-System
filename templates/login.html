@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login</title>
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      /* Soft baby pink gradient background */
+      background: linear-gradient(135deg, #ffe5ec 0%, #f9c6d4 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(60,64,67,.10);
+      max-width: 420px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 36px 40px 36px;
+      border: 1.5px solid #e4e6eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .form-title {
+      font-weight: 700;
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 2rem;
+      color: #d7263d;
+      letter-spacing: -0.5px;
+    }
+    .form-label {
+      font-weight: 500;
+      color: #22223b;
+      margin-bottom: 6px;
+    }
+    .form-control {
+      border-radius: 7px;
+      border: 1.5px solid #dadce0;
+      font-size: 1.05rem;
+      padding: 12px 14px;
+      background: #f6f7fb;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 18px;
+    }
+    .form-control:focus {
+      border-color: #d7263d;
+      box-shadow: 0 0 0 2px rgba(215,38,61,0.10);
+      background: #fff;
+    }
+    .btn-solid {
+      background-color: #d7263d;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 13px 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      border: none;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(215,38,61,0.10);
+      margin-top: 10px;
+    }
+    .btn-solid:hover {
+      background-color: #b71c2b;
+    }
+    @media (max-width: 600px) {
+      .login-card {
+        padding: 28px 4vw 28px 4vw;
+      }
+      .form-title {
+        font-size: 1.3rem;
+        margin-bottom: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2 class="form-title">Admin Login</h2>
+    <form method="POST" action="/login" autocomplete="off">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" name="email" class="form-control" id="email" placeholder="admin@example.com" required />
+      </div>
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required />
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-solid">Login</button>
+      </div>
+    </form>
+  </div>
+  <script src="../static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
