@@ -11,6 +11,7 @@ load_dotenv()
 # Supabase setup
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+SUPABASE_ANON_KEY= os.getenv('SUPABASE_ANON_KEY')
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Twilio setup
@@ -27,6 +28,8 @@ app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key')
 # Global to track current request
 recent_request = {}
 
+
+#Home page
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -74,18 +77,14 @@ def thanks():
 
 
 #Supabase auth login remaining to integrate
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
-    if request.method == 'POST':
-        
-        email = request.form['email']
-        password = request.form['password']
-        # Placeholder logic will go here 
-        if email == 'admin@example.com' and password == 'securepassword':
-            return redirect('/dashboard')  
-        else:
-            return "Invalid credentials", 401
-    return render_template('login.html')
+    return render_template(
+        'login.html',
+        supabase_url=SUPABASE_URL,
+        supabase_anon_key=SUPABASE_ANON_KEY
+    )
+
 
 #View the admin dashboard
 @app.route('/dashboard')
