@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Request History</title>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container py-4">
+    <h2 class="mb-4 text-center">Request History</h2>
+
+    {% if history %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Blood Group</th>
+            <th>Total Calls</th>
+            <th>Answered</th>
+            <th>Confirmed</th>
+            <th>Requested At</th>
+            <th>Confirmed Donors</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in history %}
+          <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.blood_group }}</td>
+            <td>{{ row.total_calls }}</td>
+            <td>{{ row.answered_calls }}</td>
+            <td>{{ row.confirmed_count }}</td>
+            <td>{{ row.requested_at[:19].replace('T', ' ') }}</td>
+            <td>
+              <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#donorModal{{ row.id }}">View</button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="donorModal{{ row.id }}" tabindex="-1" aria-labelledby="modalLabel{{ row.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalLabel{{ row.id }}">Confirmed Donors</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      {% if row.confirmed_donors %}
+                      <table class="table table-sm table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Blood Group</th>
+                            <th>Phone</th>
+                            <th>DOB</th>
+                            <th>Location</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for donor in row.confirmed_donors %}
+                          <tr>
+                            <td>{{ donor.Name }}</td>
+                            <td>{{ donor.Age }}</td>
+                            <td>{{ donor.Blood_Group }}</td>
+                            <td>{{ donor.Phone_Number }}</td>
+                            <td>{{ donor.DOB }}</td>
+                            <td>{{ donor.Location }}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                        <p>No confirmed donors.</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-center">No history found yet.</p>
+    {% endif %}
+
+    <!-- Back to Dashboard Button -->
+    <div class="text-center mt-4">
+      <a href="/dashboard" class="btn btn-outline-primary">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
