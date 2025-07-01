@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | IVR Donor System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/dist/css/bootstrap.min.css') }}">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffe5ec 0%, #f9c6d4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .dashboard-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(60,64,67,.13);
+      padding: 40px 30px 32px 30px;
+      max-width: 420px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dashboard-logo {
+      height: 60px;
+      margin-bottom: 24px;
+    }
+    .dashboard-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #d7263d;
+      margin-bottom: 32px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+    .dashboard-actions {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      margin-bottom: 24px;
+    }
+    .dashboard-actions .btn {
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 14px 0;
+      border-radius: 8px;
+    }
+    .logout-btn {
+      width: 100%;
+      margin-top: 8px;
+      background: #fff0f3;
+      color: #d7263d;
+      border: 1.5px solid #d7263d;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 12px 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .logout-btn:hover {
+      background: #d7263d;
+      color: #fff;
+    }
+    @media (max-width: 600px) {
+      .dashboard-card {
+        padding: 18px 4vw;
+      }
+      .dashboard-logo {
+        height: 40px;
+      }
+      .dashboard-title {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-card">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="dashboard-logo">
+    <div class="dashboard-title">Welcome, Admin!</div>
+    <div class="dashboard-actions">
+      <button class="btn btn-primary" onclick="window.location.href='/donors'">
+        View All Donors
+      </button>
+      <button class="btn btn-secondary" onclick="window.location.href='/history'">
+        View Request History
+      </button>
+      <button class="btn btn-success" onclick="window.location.href='/request'">
+        Request Blood
+      </button>
+    </div>
+    <button class="logout-btn" onclick="window.location.href='/home'">Logout</button>
+  </div>
+  <script src="{{ url_for('static', filename='bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
