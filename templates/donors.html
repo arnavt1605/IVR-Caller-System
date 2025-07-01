@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>All Donors</title>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/static/css/custom.css" />
+</head>
+<body>
+  <div class="container py-4">
+    <h1 class="text-center mb-4">Registered Donors</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div><strong>Total Donors:</strong> {{ total_donors }}</div>
+      <div>
+        <strong>Donors per Blood Group:</strong>
+        <ul class="list-inline mb-0">
+          {% for group, count in blood_group_counts.items() %}
+            <li class="list-inline-item badge bg-info text-dark">{{ group }}: {{ count }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Blood Group</th>
+          <th>Phone Number</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for donor in donors %}
+        <tr>
+          <td>{{ donor.Donor_ID }}</td>
+          <td>{{ donor.Name }}</td>
+          <td>{{ donor.Age }}</td>
+          <td>{{ donor.Blood_Group }}</td>
+          <td>{{ donor.Phone_Number }}</td>
+          <td>{{ donor.Location or 'N/A' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <nav>
+      <ul class="pagination justify-content-center">
+        {% for p in range(1, total_pages + 1) %}
+        <li class="page-item {% if p == page %}active{% endif %}">
+          <a class="page-link" href="/donors?page={{ p }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+
+  <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
