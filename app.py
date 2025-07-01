@@ -3,6 +3,7 @@ from supabase import create_client
 from flask import Flask, request, jsonify, Response, render_template, redirect, session
 from twilio.rest import Client as TwilioClient
 from concurrent.futures import ThreadPoolExecutor
+from math import ceil
 import os
 
 load_dotenv()
@@ -72,7 +73,60 @@ def thanks():
     return render_template('thanks.html')
 
 
+#Supabase auth login remaining to integrate
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        
+        email = request.form['email']
+        password = request.form['password']
+        # Placeholder logic will go here 
+        if email == 'admin@example.com' and password == 'securepassword':
+            return redirect('/dashboard')  
+        else:
+            return "Invalid credentials", 401
+    return render_template('login.html')
 
+#To allow admin to view list of all donors in the database
+@app.route('/donors')
+def view_donors():
+    page = int(request.args.get('page', 1))
+    per_page = 50
+    offset = (page - 1) * per_page
+
+    # Get all donors (paginated)
+    all_donors = supabase.table("donors").select("*").order("Donor_ID").range(offset, offset + per_page - 1).execute().data
+
+    # Get total count of donors
+    total = supabase.table("donors").select("Donor_ID", count='exact').execute().count or 0
+    total_pages = ceil(total / per_page)
+
+    # Get blood group counts
+    blood_group_counts = {}
+    all_data = supabase.table("donors").select("Blood_Group").execute().data
+    for d in all_data:
+        bg = d["Blood_Group"]
+        blood_group_counts[bg] = blood_group_counts.get(bg, 0) + 1
+
+    return render_template(
+        "donors.html",
+        donors=all_donors,
+        page=page,
+        total_pages=total_pages,
+        total_donors=total,
+        blood_group_counts=blood_group_counts
+    )
+
+#View previous history of blood group requested
+@app.route('/history')
+def view_history():
+    result = supabase.table("history").select("*").order("id", desc=True).execute()
+    history_data = result.data
+
+    return render_template("history.html", history=history_data)
+
+
+#Main logic that will initiate the calls 
 @app.route('/call_donors', methods=['POST'])
 def call_donors():
     global recent_request
