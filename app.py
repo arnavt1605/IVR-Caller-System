@@ -31,7 +31,7 @@ recent_request = {}
 def home():
     return render_template('home.html')
 
-
+#New donor registration form
 @app.route('/register', methods=['GET'])
 def show_register_form():
     return render_template('register.html')
@@ -86,6 +86,12 @@ def login():
         else:
             return "Invalid credentials", 401
     return render_template('login.html')
+
+#View the admin dashboard
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
 
 #To allow admin to view list of all donors in the database
 @app.route('/donors')
@@ -233,6 +239,19 @@ def status():
             recent_request["answered"].append(from_number)
 
     return '', 204
+
+
+#Logic for requesting sepcific blood groups and processing all of it
+@app.route('/request')
+def request_page():
+    return render_template("request.html")
+
+@app.route('/supabase-config')
+def supabase_config():
+    return jsonify({
+        "url": os.getenv("SUPABASE_URL"),
+        "anon": os.getenv("SUPABASE_ANON_KEY")  
+    })
 
 
 @app.route('/finalize_request', methods=['POST'])
