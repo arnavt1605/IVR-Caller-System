@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blood Request | IVR Donor System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/dist/css/bootstrap.min.css') }}">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffe5ec 0%, #f9c6d4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .request-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(60,64,67,.13);
+      padding: 38px 28px 28px 28px;
+      max-width: 520px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .logo {
+      height: 60px;
+      margin-bottom: 18px;
+    }
+    h2 {
+      color: #d7263d;
+      font-weight: bold;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .form-select, .btn {
+      font-size: 1.1rem;
+    }
+    .table {
+      background-color: white;
+    }
+    .logout-btn {
+      width: 100%;
+      margin-top: 18px;
+      background: #fff0f3;
+      color: #d7263d;
+      border: 1.5px solid #d7263d;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 12px 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .logout-btn:hover {
+      background: #d7263d;
+      color: #fff;
+    }
+    .dashboard-btn {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 12px 0;
+    }
+    @media (max-width: 600px) {
+      .request-card {
+        padding: 16px 2vw;
+      }
+      .logo {
+        height: 38px;
+      }
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="request-card">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+    <h2>Request Blood Donation</h2>
+    <div class="w-100 mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-8">
+          <select id="bloodGroup" class="form-select">
+            <option selected disabled>Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-success w-100" onclick="triggerCall()">Trigger Calls</button>
+        </div>
+      </div>
+    </div>
+
+    <h5 class="w-100 mb-2 mt-3">Confirmed Donors</h5>
+    <div class="table-responsive w-100 mb-2">
+      <table class="table table-bordered" id="confirmedTable">
+        <thead class="table-danger">
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Blood Group</th>
+            <th>Phone</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be added here -->
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn btn-danger dashboard-btn" onclick="finalizeRequest()">Finalize Request</button>
+    <a href="/dashboard" class="btn btn-outline-secondary dashboard-btn">Back to Dashboard</a>
+    <a href="/home" class="logout-btn">Logout</a>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.4/dist/umd/supabase.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="{{ url_for('static', filename='bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+
+  <script>
+    let supabase;
+
+    async function initializeSupabase() {
+      const response = await fetch('/supabase-config');
+      const config = await response.json();
+      supabase = window.supabase.createClient(config.url, config.anon);
+
+      // Initial load
+      await loadConfirmedDonors();
+
+      // Subscribe to real-time inserts
+      supabase.channel('realtime:confirmed_donors')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'confirmed_donors',
+        }, payload => {
+          alert(`✅ New donor confirmed!! : ${payload.new.Name}`);
+          loadConfirmedDonors();
+        })
+        .subscribe();
+    }
+
+    async function loadConfirmedDonors() {
+      const { data, error } = await supabase.from('confirmed_donors').select('*');
+      const tbody = document.querySelector('#confirmedTable tbody');
+      tbody.innerHTML = '';
+      (data || []).forEach(donor => {
+        const row = `
+          <tr>
+            <td>${donor.Name}</td>
+            <td>${donor.Age}</td>
+            <td>${donor.Blood_Group}</td>
+            <td>${donor.Phone_Number}</td>
+            <td>${donor.Location || '-'}</td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+    }
+
+    async function triggerCall() {
+      const group = document.getElementById('bloodGroup').value;
+      if (!group) {
+        alert("Please select a blood group!");
+        return;
+      }
+      const res = await fetch('/call_donors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blood_group: group })
+      });
+      const result = await res.json();
+      alert(result.status || 'Calls initiated!');
+    }
+
+    async function finalizeRequest() {
+      const btn = document.querySelector('button.btn.btn-danger');
+      btn.disabled = true;
+      btn.innerText = "Finalizing...";
+      try {
+        if (!confirm("Are you sure you want to finalize this request? This will clear the confirmed donors list and save to history.")) {
+          btn.disabled = false;
+          btn.innerText = "Finalize Request";
+          return;
+        }
+        const res = await fetch('/finalize_request', { method: 'POST' });
+        if (res.status === 204) {
+          alert("✅ Request finalized and saved to history.");
+          loadConfirmedDonors();
+        } else {
+          alert("❌ Finalization failed.");
+        }
+      } catch (error) {
+        alert("🚫 Network error. Try again.");
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Finalize Request";
+      }
+    }
+
+    // Initialize Supabase
+    initializeSupabase();
+  </script>
+</body>
+</html>
