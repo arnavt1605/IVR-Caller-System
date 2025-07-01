@@ -1,7 +1,8 @@
 ### What works till now
 1. Call is getting initiated
-2. donors and confirmed_donors table is also getting updated 
-3. Http request to /call_bplus_donors is initiating the call
+2. Added two extra tables, call_logs and history, in addition to donors and confirmed donors
+3. Working on the frontend
+4. General route created for requesting calls to a specific blood group
 
 ### How it works
 1. Run app.py
