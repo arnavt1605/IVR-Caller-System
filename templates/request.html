@@ -4,106 +4,69 @@
   <meta charset="UTF-8">
   <title>Blood Request | IVR Donor System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/dist/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
   <style>
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, #ffe5ec 0%, #f9c6d4 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .request-card {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px 0 rgba(60,64,67,.13);
-      padding: 38px 28px 28px 28px;
-      max-width: 520px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0;
+      padding: 0;
     }
     .logo {
-      height: 60px;
-      margin-bottom: 18px;
-    }
-    h2 {
-      color: #d7263d;
-      font-weight: bold;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    .form-select, .btn {
-      font-size: 1.1rem;
-    }
-    .table {
-      background-color: white;
+      height: 48px;
+      margin: 24px auto 8px auto;
+      display: block;
     }
     .logout-btn {
-      width: 100%;
-      margin-top: 18px;
-      background: #fff0f3;
-      color: #d7263d;
-      border: 1.5px solid #d7263d;
-      font-weight: 600;
-      border-radius: 8px;
-      padding: 12px 0;
-      transition: background 0.2s, color 0.2s;
-    }
-    .logout-btn:hover {
-      background: #d7263d;
-      color: #fff;
-    }
-    .dashboard-btn {
-      width: 100%;
-      margin-top: 10px;
-      border-radius: 8px;
-      font-weight: 600;
-      padding: 12px 0;
+      position: absolute;
+      top: 24px;
+      right: 32px;
     }
     @media (max-width: 600px) {
-      .request-card {
-        padding: 16px 2vw;
-      }
       .logo {
-        height: 38px;
+        height: 32px;
+        margin-top: 12px;
       }
-      h2 {
-        font-size: 1.2rem;
+      .logout-btn {
+        top: 12px;
+        right: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="request-card">
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
-    <h2>Request Blood Donation</h2>
-    <div class="w-100 mb-4">
-      <div class="row g-2 align-items-end">
-        <div class="col-8">
-          <select id="bloodGroup" class="form-select">
-            <option selected disabled>Select Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-          </select>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-success w-100" onclick="triggerCall()">Trigger Calls</button>
-        </div>
+  <a href="/home" class="btn btn-outline-danger logout-btn">Logout</a>
+  <img src="/static/img/logo.png" alt="Logo" class="logo">
+
+  <div class="container py-4">
+    <h2 class="mb-4 text-center" style="color:#d7263d; font-weight:bold;">Request Blood Donation</h2>
+
+    <!-- Blood Group Selection -->
+    <div class="row mb-4 justify-content-center align-items-end">
+      <div class="col-md-4 col-8">
+        <label for="bloodGroup" class="form-label">Select Blood Group</label>
+        <select id="bloodGroup" class="form-select">
+          <option selected disabled>Select Blood Group</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+      </div>
+      <div class="col-md-2 col-4">
+        <button class="btn btn-success w-100" onclick="triggerCall()">Trigger Calls</button>
       </div>
     </div>
 
-    <h5 class="w-100 mb-2 mt-3">Confirmed Donors</h5>
-    <div class="table-responsive w-100 mb-2">
-      <table class="table table-bordered" id="confirmedTable">
+    <!-- Confirmed Donors Table -->
+    <h5 class="mb-2 mt-3 text-center">Confirmed Donors</h5>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped align-middle" id="confirmedTable">
         <thead class="table-danger">
           <tr>
             <th>Name</th>
@@ -119,15 +82,16 @@
       </table>
     </div>
 
-    <button class="btn btn-danger dashboard-btn" onclick="finalizeRequest()">Finalize Request</button>
-    <a href="/dashboard" class="btn btn-outline-secondary dashboard-btn">Back to Dashboard</a>
-    <a href="/home" class="logout-btn">Logout</a>
+    <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+      <button class="btn btn-danger" onclick="finalizeRequest()">Finalize Request</button>
+      <a href="/dashboard" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
   </div>
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.4/dist/umd/supabase.min.js"></script>
   <!-- Bootstrap JS -->
-  <script src="{{ url_for('static', filename='bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <script>
     let supabase;
