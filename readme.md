@@ -10,3 +10,9 @@
 3. Copy ngrok url to .env file
 4. Close app.py and run again
 5. Use postman to send http request to /call_bplus_donors (post request)
+
+
+### Major challenge
+1. Setting up supabase authentication and checking its working
+2. Simultaneous calling needs to be tested 
+3. Donor indexing (Future Update)
