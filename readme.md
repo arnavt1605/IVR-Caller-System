@@ -13,6 +13,6 @@
 
 
 ### Major challenge
-1. Setting up supabase authentication and checking its working
+1. Setting up supabase authentication and checking its working (working on it)
 2. Simultaneous calling needs to be tested 
 3. Donor indexing (Future Update)
