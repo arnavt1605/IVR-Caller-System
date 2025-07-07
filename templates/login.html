@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login | IVR Donor System</title>
-  <link href="{{ url_for('static', filename='bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
   <style>
     body {
       min-height: 100vh;
@@ -238,6 +238,9 @@
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      console.log('Login result:', data, error); // added extra to check for the error
+
       if (error) {
         document.getElementById('login-msg').textContent = error.message || "Login failed";
       } else {
