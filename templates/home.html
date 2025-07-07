@@ -85,19 +85,35 @@
   
   <script src="{{ url_for('static', filename='bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 
+
+
   <script>
-    // Redirect invite or recovery links to the correct password page
-    (function() {
-      const params = new URLSearchParams(window.location.search);
-      const type = params.get('type');
-      if (type === 'invite') {
-        window.location.href = '/set-password' + window.location.search;
+  // Combining query parameters and hash parameters for a new logic
+  function getAllParams() {
+    const params = new URLSearchParams(window.location.search);
+    
+    // If hash exists and starts with #, parse it as query params too
+    if (window.location.hash && window.location.hash.startsWith('#')) {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      for (const [key, value] of hashParams.entries()) {
+        params.set(key, value);
       }
-      if (type === 'recovery') {
-        window.location.href = '/reset-password' + window.location.search;
-      }
-    })();
-  </script>
-  
+    }
+    return params;
+  }
+
+  (function() {
+    const params = getAllParams();
+    const type = params.get('type');
+    if (type === 'invite') {
+      window.location.href = '/set-password?' + params.toString();
+    }
+    if (type === 'recovery') {
+      window.location.href = '/reset-password?' + params.toString();
+    }
+  })();
+</script>
+
+
 </body>
 </html>
