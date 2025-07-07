@@ -177,7 +177,7 @@ def call_donors():
         except Exception as e:
             print(f"[ERROR] Call failed for {phone}: {e}")
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=5) as executor:        #Can be changed later
         for donor in donors:
             executor.submit(make_call, donor)
 
