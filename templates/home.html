@@ -83,7 +83,7 @@
   </div>
 
   
-  <script src="{{ url_for('static', filename='bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 
 
@@ -91,7 +91,7 @@
   // Combining query parameters and hash parameters for a new logic
   function getAllParams() {
     const params = new URLSearchParams(window.location.search);
-    
+
     // If hash exists and starts with #, parse it as query params too
     if (window.location.hash && window.location.hash.startsWith('#')) {
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
