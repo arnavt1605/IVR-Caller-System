@@ -79,11 +79,13 @@ def thanks():
 #Supabase auth login remaining to integrate
 @app.route('/login')
 def login():
-    return render_template(
-        'login.html',
-        supabase_url=SUPABASE_URL,
-        supabase_anon_key=SUPABASE_ANON_KEY
-    )
+    return render_template('login.html', supabase_url=SUPABASE_URL, supabase_anon_key=SUPABASE_ANON_KEY)
+
+
+# Set password logic for new users - Invite sent through mail
+@app.route('/set-password')
+def set_password():
+    return render_template('set_password.html', supabase_url=SUPABASE_URL, supabase_anon_key=SUPABASE_ANON_KEY)
 
 
 #View the admin dashboard
@@ -184,6 +186,7 @@ def call_donors():
     return jsonify({"status": "Calls initiated", "count": len(donors)}), 200
 
 
+# Message that will play when call is received
 @app.route('/voice', methods=['POST'])
 def voice():
     print("[VOICE] /voice triggered")
@@ -199,6 +202,7 @@ def voice():
     return Response(response, mimetype='text/xml')
 
 
+#Logic for handling the input by the user
 @app.route('/process', methods=['POST'])
 def process():
     digit = request.values.get('Digits', '')
@@ -226,6 +230,7 @@ def process():
     return Response("""<?xml version='1.0' encoding='UTF-8'?><Response><Say>Thank you for your response. Goodbye!</Say></Response>""", mimetype='text/xml')
 
 
+
 @app.route('/status', methods=['POST'])
 def status():
     from_number = request.values.get('To', '')
@@ -251,7 +256,6 @@ def supabase_config():
         "url": os.getenv("SUPABASE_URL"),
         "anon": os.getenv("SUPABASE_ANON_KEY")  
     })
-
 
 @app.route('/finalize_request', methods=['POST'])
 def finalize_request():
@@ -281,6 +285,7 @@ def finalize_request():
     supabase.table("confirmed_donors").delete().neq("Donor_ID", -1).execute()
     print("[FINALIZED] History saved and confirmed_donors table cleared.")
     return '', 204
+
 
 
 if __name__ == '__main__':
