@@ -3,16 +3,12 @@
 2. Added two extra tables, call_logs and history, in addition to donors and confirmed donors
 3. Working on the frontend
 4. General route created for requesting calls to a specific blood group
+5. Login authentication using supabase auth 
 
-### How it works
-1. Run app.py
-2. Run ngrok server
-3. Copy ngrok url to .env file
-4. Close app.py and run again
-5. Use postman to send http request to /call_bplus_donors (post request)
+Currently the website is hosted on Render.com -> ivr-caller-system.onrender.com
 
 
-### Major challenge
-1. Setting up supabase authentication and checking its working (working on it)
+### Future Improvements/Additions
+1. Reset password
 2. Simultaneous calling needs to be tested 
 3. Donor indexing (Future Update)
