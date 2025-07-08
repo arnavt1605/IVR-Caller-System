@@ -199,11 +199,11 @@
       </div>
       <span class="forgot-link" onclick="showResetFloat()">Forgot password?</span>
       <div class="d-grid">
-        <button type="submit" class="btn btn-solid">Login</button>
+        <button type="submit" class="btn btn-solid">Login</button>    <!--Login Button present here-->
       </div>
       <div id="login-msg" class="login-msg"></div>
     </form>
-  </div>
+  </div> 
 
   <!-- Floating Reset Password Window -->
   <div class="reset-float-bg" id="resetFloatBg">
@@ -219,7 +219,7 @@
     </div>
   </div>
 
-  <!-- Floating Success Alert -->
+  <!-- Floating Success Alert --> 
   <div class="alert alert-success alert-float" id="resetAlert">
     Reset link sent! Please check your email.
   </div>
@@ -232,7 +232,7 @@
     
     const SUPABASE_URL = "{{ supabase_url }}";
     const SUPABASE_ANON_KEY = "{{ supabase_anon_key }}";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Login logic
     document.getElementById('login-form').addEventListener('submit', async function(e) {
@@ -240,13 +240,14 @@
       document.getElementById('login-msg').textContent = "Logging in...";
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
 
       console.log('Login result:', data, error); // added extra to check for the error 
 
-      if (error) {
+      if (error){
         document.getElementById('login-msg').textContent = error.message || "Login failed";
-      } else {
+      }
+      else {
         document.getElementById('login-msg').textContent = "";
         window.location.href = "/dashboard";
       }
@@ -272,7 +273,7 @@
         return;
       }
       msg.textContent = "Sending reset link...";
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+      const { data, error } = await client.auth.resetPasswordForEmail(email);
       if (error) {
         msg.style.color = "#d7263d";
         msg.textContent = error.message || "Failed to send reset link.";
