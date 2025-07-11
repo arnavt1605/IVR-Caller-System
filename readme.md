@@ -8,7 +8,8 @@
 
 
 ### Files needing updates:
-1. `register.html`
-2. `history.html`
-3. `request.html`
-4. `app.py` -> `/register_donor` , `/process` , `/finalize_request`
+1. `donors.html`
+2. `register.html`
+3. `history.html`
+4. `request.html`
+5. `app.py` -> `/register_donor` , `/process` , `/finalize_request`
