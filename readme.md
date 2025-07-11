@@ -7,7 +7,7 @@
 6. 
 
 
-# Files needing updates:
+### Files needing updates:
 1. `register.html`
 2. `history.html`
 3. `request.html`
