@@ -29,17 +29,17 @@ app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key')
 recent_request = {}
 
 
-#Home page
+# Home page
 @app.route('/')
 def home():
     return render_template('home.html')
 
-#New donor registration form
+# New donor registration form
 @app.route('/register', methods=['GET'])
 def show_register_form():
     return render_template('register.html')
 
-
+# Donor registration form 
 @app.route('/register_donor', methods=['POST'])
 def register_donor():
     name = request.form.get('name')
@@ -48,8 +48,9 @@ def register_donor():
     phone = request.form.get('phone')
     dob = request.form.get('dob')
     location = request.form.get('location')
+    gender = request.form.get('gender')
 
-    # Check required fields
+    # Check all the required fields
     if not all([name, age, blood_group, phone, dob, location]):
         return "Missing fields", 400
 
@@ -60,7 +61,8 @@ def register_donor():
             "Blood_Group": blood_group,
             "Phone_Number": int(phone),
             "DOB": dob,
-            "Location": location
+            "Location": location,
+            "Gender" : gender
         }).execute()
 
         print(f"[REGISTERED] {name} added to donors.")
@@ -70,7 +72,7 @@ def register_donor():
         print(f"[ERROR] Failed to register donor: {e}")
         return "Something went wrong", 500
     
-
+# Thank you page
 @app.route('/thanks')
 def thanks():
     return render_template('thanks.html')
