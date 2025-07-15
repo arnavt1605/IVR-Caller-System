@@ -8,7 +8,8 @@
 7. Updated `donors.html` and `request.html`.
 8. Added "I don't know" option in blood group selection in `register.html`.
 9. Save Contact button added in `thanks.html`.
-10. 
+10. Play human voice when called instead of automated voice.
+11. Added reset password code in `reset_password.html`.
 
 ### Files needing updates:
 1. `donors.html`
