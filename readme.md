@@ -6,6 +6,9 @@
 5. Updated `history.html` with the new columns.
 6. Updated app.py routes (all).
 7. Updated `donors.html` and `request.html`.
+8. Added "I don't know" option in blood group selection in `register.html`.
+9. Save Contact button added in `thanks.html`.
+10. 
 
 ### Files needing updates:
 1. `donors.html`
@@ -16,5 +19,8 @@
 
 ### Main Changes:
 1. Calling logic needs to be changed (WIP)
+2. Integrate whatsapp messaging system along with confirmation
+
+
 
 
