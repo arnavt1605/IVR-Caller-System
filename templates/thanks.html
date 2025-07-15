@@ -54,9 +54,11 @@
       width: 100%;
       transition: background 0.2s, box-shadow 0.2s;
       box-shadow: 0 2px 8px rgba(215,38,61,0.10);
+      margin-bottom: 10px;
     }
-
-    
+    .btn-solid:last-child {
+      margin-bottom: 0;
+    }
     .btn-solid:hover {
       background-color: #b71c2b;
     }
@@ -73,12 +75,13 @@
 <body>
   <div class="thank-card">
     <div class="thank-icon">🎉</div>
-    <div class="thank-title">Thank You!</div>
-    <div class="thank-desc">Your registration has been received.<br>We'll contact you when needed.</div>
+    <div class="thank-title">Thank You for Registering!</div>
+    <div class="thank-desc">
+      Want to recognize our calls instantly? <br>
+      Tap the button below to save our contact for quick and easy communication—especially during urgent needs!
+    </div>
+    <a href="tel:+16802015441" class="btn btn-solid">Save Contact as Sociio Ichor</a>
     <a href="/" class="btn btn-solid">Back to Home</a>
   </div>
 </body>
 </html>
-
-
-
