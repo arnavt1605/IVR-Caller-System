@@ -20,9 +20,10 @@
 5. `app.py` -> `/register_donor` , `/process` , `/finalize_request`
 
 ### Make Changes:
-1. Calling logic needs to be changed (WIP)
-2. Integrate whatsapp messaging system along with confirmation
-3. Upload the cron job file on render
+1. Calling logic needs to be changed (WIP).
+2. Integrate whatsapp messaging system along with confirmation.
+3. Upload the cron job file on render.
+4. Add deployment URL to the `/voice` route.
 
 
 
