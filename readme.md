@@ -10,6 +10,7 @@
 9. Save Contact button added in `thanks.html`.
 10. Play human voice when called instead of automated voice.
 11. Added reset password code in `reset_password.html`.
+13. Added a script file to schedule a cron job as well
 
 ### Files needing updates:
 1. `donors.html`
@@ -18,10 +19,10 @@
 4. `request.html`
 5. `app.py` -> `/register_donor` , `/process` , `/finalize_request`
 
-### Main Changes:
+### Make Changes:
 1. Calling logic needs to be changed (WIP)
 2. Integrate whatsapp messaging system along with confirmation
-
+3. Upload the cron job file on render
 
 
 
