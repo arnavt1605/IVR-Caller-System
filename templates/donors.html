@@ -28,9 +28,11 @@
           <th>ID</th>
           <th>Name</th>
           <th>Age</th>
+          <th>Gender</th>
           <th>Blood Group</th>
           <th>Phone Number</th>
           <th>Location</th>
+          <th>Registered At</th>
         </tr>
       </thead>
       <tbody>
@@ -39,9 +41,11 @@
           <td>{{ donor.Donor_ID }}</td>
           <td>{{ donor.Name }}</td>
           <td>{{ donor.Age }}</td>
+          <td>{{ donor.Gender }}</td>
           <td>{{ donor.Blood_Group }}</td>
           <td>{{ donor.Phone_Number }}</td>
           <td>{{ donor.Location or 'N/A' }}</td>
+          <td>{{ donor.Registered_At or 'N/A' }}</td>     
         </tr>
         {% endfor %}
       </tbody>
