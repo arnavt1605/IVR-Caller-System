@@ -89,6 +89,10 @@ def login():
 def set_password():
     return render_template('set_password.html', supabase_url=SUPABASE_URL, supabase_anon_key=SUPABASE_ANON_KEY)
 
+# Reset Password logic for existing users
+@app.route('/reset-password')
+def reset_password():
+    return render_template('reset_password.html', supabase_url=SUPABASE_URL, supabase_anon_key=SUPABASE_ANON_KEY)
 
 #View the admin dashboard
 @app.route('/dashboard')
@@ -188,19 +192,18 @@ def call_donors():
     return jsonify({"status": "Calls initiated", "count": len(donors)}), 200
 
 
-# Message that will play when call is received
+# Message that will play when call is received  # NEED TO UPDATE THE URL HERE !!
 @app.route('/voice', methods=['POST'])
 def voice():
     print("[VOICE] /voice triggered")
     gather_url = f"{CALLBACK_URL}/process"
     response = f"""<?xml version='1.0' encoding='UTF-8'?>
-    <Response>
-        <Say>This is an urgent request for blood donation. If you are available to donate, press 1. Otherwise, you may hang up.</Say>
-        <Gather action="{gather_url}" method="POST" numDigits="1">
-            <Say>Please press 1 to confirm your availability.</Say>
+    <Response>  
+        <Gather numDigits="1" action="/process" method="POST">
+            <Play>https://yourdomain.com/static/audio/recording.mp3</Play>
         </Gather>
-        <Say>No input received. Goodbye!</Say>
-    </Response>"""
+    </Response>
+"""
     return Response(response, mimetype='text/xml')
 
 
@@ -220,6 +223,7 @@ def process():
             supabase.table('confirmed_donors').insert({
                 "Name": donor["Name"],
                 "Age": donor["Age"],
+                "Gender": donor.get("Gender"),
                 "Blood_Group": donor["Blood_Group"],
                 "Phone_Number": int(donor["Phone_Number"]),
                 "DOB": donor.get("DOB"),
@@ -232,7 +236,7 @@ def process():
     return Response("""<?xml version='1.0' encoding='UTF-8'?><Response><Say>Thank you for your response. Goodbye!</Say></Response>""", mimetype='text/xml')
 
 
-
+#Updating status of the call
 @app.route('/status', methods=['POST'])
 def status():
     from_number = request.values.get('To', '')
@@ -248,6 +252,7 @@ def status():
 
 
 #Logic for requesting sepcific blood groups and processing all of it
+
 @app.route('/request')
 def request_page():
     return render_template("request.html")
@@ -268,6 +273,7 @@ def finalize_request():
         {
             "Name": d["Name"],
             "Age": d["Age"],
+            "Gender": d.get("Gender"),
             "Blood_Group": d["Blood_Group"],
             "Phone_Number": d["Phone_Number"],
             "Location": d.get("Location"),
