@@ -3,6 +3,7 @@ name: Update Donor Ages Weekly
 on:
   schedule:
     - cron: '0 3 * * 1'  # Every Monday at 3:00 AM UTC (8:30 AM IST)
+  workflow_dispatch:
 
 jobs:
   run-script:
