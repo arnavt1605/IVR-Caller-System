@@ -10,7 +10,9 @@
 9. Save Contact button added in `thanks.html`.
 10. Play human voice when called instead of automated voice.
 11. Added reset password code in `reset_password.html`.
-13. Added a script file to schedule a cron job as well
+13. Added a script file to schedule a cron job as well using cron-job.org
+14. Reset password logic working successfully
+
 
 ### Files needing updates:
 1. `donors.html`
