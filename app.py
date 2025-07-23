@@ -5,6 +5,7 @@ from twilio.rest import Client as TwilioClient
 from concurrent.futures import ThreadPoolExecutor
 from math import ceil
 from datetime import date, datetime
+import pytz
 import os
 
 load_dotenv()
@@ -111,6 +112,18 @@ def view_donors():
     # Get all donors (paginated)
     all_donors = supabase.table("donors").select("*").order("Donor_ID").range(offset, offset + per_page - 1).execute().data
 
+    for donor in all_donors:
+        last_called_utc = donor.get("last_called_at")
+        if last_called_utc:
+            try:
+                utc_dt = datetime.fromisoformat(last_called_utc.replace('Z', '+00:00'))  # Convert from UTC
+                ist_dt = utc_dt.astimezone(pytz.timezone('Asia/Kolkata'))
+                donor["last_called_at_ist"] = ist_dt.strftime("%d-%m-%Y %I:%M %p")
+            except Exception:
+                donor["last_called_at_ist"] = "Invalid"
+        else:
+            donor["last_called_at_ist"] = "Never"
+
     # Get total count of donors
     total = supabase.table("donors").select("Donor_ID", count='exact').execute().count or 0
     total_pages = ceil(total / per_page)
@@ -122,14 +135,7 @@ def view_donors():
         bg = d["Blood_Group"]
         blood_group_counts[bg] = blood_group_counts.get(bg, 0) + 1
 
-    return render_template(
-        "donors.html",
-        donors=all_donors,
-        page=page,
-        total_pages=total_pages,
-        total_donors=total,
-        blood_group_counts=blood_group_counts
-    )
+    return render_template("donors.html", donors=all_donors, page=page, total_pages=total_pages, total_donors=total, blood_group_counts=blood_group_counts)
 
 #View previous history of blood group requested
 @app.route('/history')
@@ -150,15 +156,34 @@ def call_donors():
     if not blood_group:
         return jsonify({"error": "blood_group is required"}), 400
 
-    response = supabase.table('donors').select('*').eq('Blood_Group', blood_group).execute()
-    donors = response.data
+    #Fetching last 4 call timestamps for this blood group
+    recent_calls_response = supabase.table('call_logs') \
+        .select('phone_number') \
+        .eq('blood_group', blood_group) \
+        .order('timestamp', desc=True) \
+        .limit(200).execute()  
 
-    if not donors:
+    called_recently = set()
+    for entry in recent_calls_response.data:
+        called_recently.add(entry['phone_number'])
+
+    #Fetching all donors for this blood group
+    response = supabase.table('donors').select('*').eq('Blood_Group', blood_group).execute()
+    all_donors = response.data
+
+    if not all_donors:
         return jsonify({"status": f"No {blood_group} donors found"}), 404
 
+    #Filtering donors to exclude recently called
+    donors_to_call = [d for d in all_donors if not str(d['Phone_Number']).startswith(tuple(called_recently))]
+
+    if not donors_to_call:
+        return jsonify({"status": f"All {blood_group} donors were contacted recently"}), 200
+
+    # Step 4: Track request
     recent_request = {
         "blood_group": blood_group,
-        "total_calls": len(donors),
+        "total_calls": len(donors_to_call),
         "answered": [],
     }
 
@@ -181,16 +206,19 @@ def call_donors():
                 "phone_number": phone,
                 "donor_name": donor["Name"],
                 "call_sid": call.sid,
-                "call_status": "initiated"
+                "call_status": "initiated",
+                "timestamp": datetime.now(pytz.timezone('Asia/Kolkata')).isoformat(),
+                "blood_group": blood_group
             }).execute()
         except Exception as e:
             print(f"[ERROR] Call failed for {phone}: {e}")
 
-    with ThreadPoolExecutor(max_workers=5) as executor:        #Can be changed later
-        for donor in donors:
+    # Step 5: Call in parallel
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        for donor in donors_to_call:
             executor.submit(make_call, donor)
 
-    return jsonify({"status": "Calls initiated", "count": len(donors)}), 200
+    return jsonify({"status": "Calls initiated", "count": len(donors_to_call)}), 200
 
 
 # Message that will play when call is received  # NEED TO UPDATE THE URL HERE !!
@@ -294,8 +322,6 @@ def finalize_request():
     supabase.table("confirmed_donors").delete().neq("Donor_ID", -1).execute()
     print("[FINALIZED] History saved and confirmed_donors table cleared.")
     return '', 204
-
-#Setting up cron job to update ages based on the DOB every week
 
 
 if __name__ == '__main__':
