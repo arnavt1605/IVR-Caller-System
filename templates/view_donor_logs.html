@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Donor Call Logs</title>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+  <h2 class="mb-4">Donor Call History</h2>
+
+  <form method="POST" class="mb-4">
+    <div class="input-group">
+      <input type="text" name="phone_number" class="form-control" placeholder="Enter phone number" value="{{ phone_number }}" required>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+
+  {% if donor_name %}
+  <h5>Donor Name: {{ donor_name }}</h5>
+  {% endif %}
+
+  {% if logs %}
+  <table class="table table-bordered table-hover mt-3">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Phone Number</th>
+        <th>Donor Name</th>
+        <th>Call Status</th>
+        <th>Call SID</th>
+        <th>Blood Group</th>
+        <th>Call Priority</th>
+        <th>Timestamp (IST)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>{{ log.id }}</td>
+        <td>{{ log.phone_number }}</td>
+        <td>{{ log.donor_name or 'N/A' }}</td>
+        <td>{{ log.call_status or 'N/A' }}</td>
+        <td>{{ log.call_sid or 'N/A' }}</td>
+        <td>{{ log.blood_group or 'N/A' }}</td>
+        <td>{{ log.call_priority or 'N/A' }}</td>
+        <td>{{ log.timestamp_ist }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% elif phone_number %}
+  <div class="alert alert-info mt-3">No logs found for this phone number.</div>
+  {% endif %}
+
+  <a href="/dashboard" class="btn btn-secondary mt-4">← Back to Dashboard</a>
+</div>
+</body>
+</html>
