@@ -28,4 +28,13 @@
 4. Add deployment URL to the `/voice` route.
 
 
+### New Calling Logic Idea:
+1.Get all donors of the selected blood group.
+2.Exclude donors called in last 4–5 rounds.
+3.Check how many are left:
+3. a.If enough, use them.
+3. b. not enough → ⚠️ use as many new ones as possible, then fill the rest from recently called ones.
+
+
+
 
