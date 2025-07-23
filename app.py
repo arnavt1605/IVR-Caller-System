@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, Response, render_template, redirect, 
 from twilio.rest import Client as TwilioClient
 from concurrent.futures import ThreadPoolExecutor
 from math import ceil
+from datetime import date, datetime
 import os
 
 load_dotenv()
@@ -293,6 +294,8 @@ def finalize_request():
     supabase.table("confirmed_donors").delete().neq("Donor_ID", -1).execute()
     print("[FINALIZED] History saved and confirmed_donors table cleared.")
     return '', 204
+
+#Setting up cron job to update ages based on the DOB every week
 
 
 if __name__ == '__main__':
