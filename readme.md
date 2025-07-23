@@ -10,9 +10,9 @@
 9. Save Contact button added in `thanks.html`.
 10. Play human voice when called instead of automated voice.
 11. Added reset password code in `reset_password.html`.
-13. Added a script file to schedule a cron job as well using cron-job.org
-14. Reset password logic working successfully
-
+12. Reset password logic working successfully.
+13. Added last_called_at in donors table.
+14. Added the last_called_at columns in `donors.html` as well.
 
 ### Files needing updates:
 1. `donors.html`
@@ -27,6 +27,8 @@
 3. Upload the cron job file on render.
 4. Add deployment URL to the `/voice` route.
 
+5. Let admin see info about donor from call_logs
+
 
 ### New Calling Logic Idea:
 1. Get all donors of the selected blood group.
@@ -35,5 +37,7 @@
 3. b. not enough → ⚠️ use as many new ones as possible, then fill the rest from recently called ones.
 
 
+### Removed:
+1. Removed cron job script temporarily.
 
 
