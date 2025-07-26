@@ -36,6 +36,11 @@
 3. Update the last called date to the current called date after calling
 4. Track how many times each donor has been called and limit if needed
 
+### Calling logic implemented:
+1. Prioritize never-called donors first, then by oldest last_called.
+2. Update last_called after calling.
+3. Insert into call_logs table correctly.
+4. Limit to top 10 eligible donors (you can change this if needed).
 
 ### Removed:
 1. Removed cron job script temporarily.
