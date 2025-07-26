@@ -79,7 +79,7 @@ def register_donor():
 def thanks():
     user_agent = request.user_agent.string.lower()
 
-    if "mobile" in user_agent:
+    if "mobile" in user_agent or "android" in user_agent or "iphone" in user_agent:
         return render_template("thanks_mobile.html")
     else:
         return render_template("thanks_desktop.html")
