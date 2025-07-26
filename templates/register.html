@@ -144,26 +144,13 @@
   </div>
   <script src="/static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js">
     
-    function lockCountryCode() {
+    function addCountryCode() {
       const input = document.getElementById("phone");
       const prefix = "+91";
-
-      // If prefix is missing or deleted, add it back
       if (!input.value.startsWith(prefix)) {
-        input.value = prefix + input.value.replace(/[^0-9]/g, '');
-      }
-
-      // If user tries to delete into the prefix, reset to prefix
-      if (input.value.length < prefix.length) {
         input.value = prefix;
       }
-
-      // Optional: move cursor to end
-      setTimeout(() => {
-        input.selectionStart = input.selectionEnd = input.value.length;
-      }, 0);
     }
-
   </script>
 </body>
 </html>
