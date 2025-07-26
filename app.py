@@ -235,6 +235,9 @@ def voice():
 """
     return Response(response, mimetype='text/xml')
 
+#View donor logs needs to be inserted here
+
+
 
 #Logic for handling the input by the user
 @app.route('/process', methods=['POST'])
