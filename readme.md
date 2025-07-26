@@ -31,12 +31,11 @@
 
 
 ### New Calling Logic Idea:
-1. Get all donors of the selected blood group.
-2. Prioritize never-called donors first
-3. Avoid recently called donors, but only if there are enough others available
-4. Log the reason for selection (call_priority) in call_logs
-5. Shuffle the eligible donors list to avoid repeat patterns
-6. Track how many times each donor has been called and limit if needed
+1. Get all donors of the selected blood group from the donors table.
+2. Prioritize never-called donors first, whose last called date is NULL then go over the remaining entries in ascending order of last called date
+3. Update the last called date to the current called date after calling
+4. Track how many times each donor has been called and limit if needed
+
 
 ### Removed:
 1. Removed cron job script temporarily.
