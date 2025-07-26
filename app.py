@@ -145,53 +145,63 @@ def view_history():
 
     return render_template("history.html", history=history_data)
 
+# View the donor info of any registered donor
+@app.route('/donor_info', methods=['GET', 'POST'])
+def donor_info():
+    donor = None
+    total_calls = 0
+    searched = False
+
+    if request.method == 'POST':
+        phone_number = request.form.get('phone_number')
+        searched = True
+
+        # Step 1: Find donor by phone number
+        donor_response = supabase.table("donors").select("*").eq("Phone_Number", phone_number).execute()
+        if donor_response.data:
+            donor = donor_response.data[0]
+            call_log_response = supabase.table("call_logs").select("id").eq("donor_id", donor["Donor_ID"]).execute()
+            total_calls = len(call_log_response.data)
+
+    return render_template("donor_info.html", donor=donor, total_calls=total_calls, searched=searched)
 
 #Main logic that will initiate the calls 
 @app.route('/call_donors', methods=['POST'])
 def call_donors():
-    global recent_request
     data = request.get_json()
     blood_group = data.get('blood_group')
-
     if not blood_group:
         return jsonify({"error": "blood_group is required"}), 400
 
-    #Fetching last 4 call timestamps for this blood group
-    recent_calls_response = supabase.table('call_logs') \
-        .select('phone_number') \
-        .eq('blood_group', blood_group) \
-        .order('timestamp', desc=True) \
-        .limit(200).execute()  
-
-    called_recently = set()
-    for entry in recent_calls_response.data:
-        called_recently.add(entry['phone_number'])
-
-    #Fetching all donors for this blood group
     response = supabase.table('donors').select('*').eq('Blood_Group', blood_group).execute()
     all_donors = response.data
-
     if not all_donors:
-        return jsonify({"status": f"No {blood_group} donors found"}), 404
+        return jsonify({"status": f"No donors with blood group {blood_group} found"}), 404
 
-    #Filtering donors to exclude recently called
-    donors_to_call = [d for d in all_donors if not str(d['Phone_Number']).startswith(tuple(called_recently))]
+    # Sorting donors here: never-called first, then by oldest last_called date
+    def donor_sort_key(donor):
+        if donor['last_called'] is None:
+            return (False, datetime.min.isoformat())  # Top priority
+        else:
+            return (True, donor['last_called'])  # Later calls
 
-    if not donors_to_call:
-        return jsonify({"status": f"All {blood_group} donors were contacted recently"}), 200
+    eligible_donors = sorted(all_donors, key=donor_sort_key)
 
-    # Step 4: Track request
+    eligible_donors = eligible_donors[:10]  #Can be changed later as per our needs
+
+    if not eligible_donors:
+        return jsonify({"status": f"No eligible {blood_group} donors to call"}), 200
+
+    global recent_request
     recent_request = {
         "blood_group": blood_group,
-        "total_calls": len(donors_to_call),
+        "total_calls": len(eligible_donors),
         "answered": [],
     }
 
+    
     def make_call(donor):
-        phone = str(donor["Phone_Number"])
-        if not phone.startswith("+"):
-            phone = "+" + phone
-
+        phone = donor['Phone_Number']  
         try:
             call = twilio_client.calls.create(
                 url=f"{CALLBACK_URL}/voice",
@@ -202,23 +212,28 @@ def call_donors():
                 status_callback_method="POST"
             )
             print(f"[CALL] {donor['Name']} ({blood_group}) at {phone}: {call.sid}")
+            supabase.table("donors").update({
+                "last_called": datetime.now(pytz.timezone("Asia/Kolkata")).isoformat()
+            }).eq("Phone_Number", phone).execute()
+
+            # Insert call log into the call_logs table
             supabase.table("call_logs").insert({
+                "donor_id": donor["id"],
                 "phone_number": phone,
-                "donor_name": donor["Name"],
                 "call_sid": call.sid,
                 "call_status": "initiated",
-                "timestamp": datetime.now(pytz.timezone('Asia/Kolkata')).isoformat(),
-                "blood_group": blood_group
+                "timestamp": datetime.now(pytz.timezone("Asia/Kolkata")).isoformat()
             }).execute()
+
         except Exception as e:
             print(f"[ERROR] Call failed for {phone}: {e}")
 
-    # Step 5: Call in parallel
     with ThreadPoolExecutor(max_workers=5) as executor:
-        for donor in donors_to_call:
+        for donor in eligible_donors:
             executor.submit(make_call, donor)
 
-    return jsonify({"status": "Calls initiated", "count": len(donors_to_call)}), 200
+    return jsonify({"status": "Calls initiated", "count": len(eligible_donors)}), 200
+
 
 
 # Message that will play when call is received  # NEED TO UPDATE THE URL HERE !!
@@ -235,7 +250,7 @@ def voice():
 """
     return Response(response, mimetype='text/xml')
 
-#View donor logs needs to be inserted here
+#View donor logs/info needs to be inserted here
 
 
 
