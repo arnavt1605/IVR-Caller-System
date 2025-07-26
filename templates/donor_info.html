@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Donor Info | IVR System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Global box-sizing */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffe5ec 0%, #f9c6d4 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+      /* Remove flex centering */
+      display: block;
+
+      overflow-x: hidden; /* No horizontal scroll */
+      overflow-y: auto;   /* Enable vertical scroll */
+    }
+
+    body {
+      min-height: 100vh;
+      /* no flex centering */
+    }
+
+    .container {
+      max-width: 520px;
+      width: 100%;
+      margin: 40px auto; /* margin top & bottom, centered horizontally */
+      padding: 38px 28px 24px 28px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(60, 64, 67, 0.07),
+        0 1.5px 6px rgba(60, 64, 67, 0.07);
+      border: 1.5px solid #e4e6eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #19365c;
+      letter-spacing: -0.7px;
+      margin-bottom: 32px;
+      text-align: center;
+      width: 100%;
+    }
+
+    form {
+      width: 100%;
+      margin-bottom: 32px;
+    }
+
+    .row.g-3 {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 auto;
+    }
+
+    input.form-control {
+      width: 100%;
+      border-radius: 7px;
+      border: 1.5px solid #dadce0;
+      padding: 11px 14px;
+      font-size: 1.08rem;
+      background: #f2f4f7;
+      text-align: center;
+      transition: border 0.18s, box-shadow 0.18s;
+    }
+    input.form-control:focus {
+      border-color: #318fe7;
+      background: #fff;
+      box-shadow: 0 0 2px 2px rgba(49, 143, 231, 0.11);
+      outline: none;
+    }
+
+    button.btn-primary {
+      width: 100%;
+      padding: 11px 22px;
+      border-radius: 7px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      background-color: #318fe7;
+      border: none;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(49, 143, 231, 0.1);
+      transition: background-color 0.2s ease;
+    }
+    button.btn-primary:hover,
+    button.btn-primary:focus {
+      background-color: #1c619e;
+      box-shadow: 0 2px 12px rgba(28, 97, 158, 0.4);
+    }
+
+    .card {
+      background: #fff;
+      width: 100%;
+      border-radius: 18px;
+      border: 1.5px solid #e4e6eb;
+      box-shadow: 0 8px 32px rgba(60, 64, 67, 0.07),
+        0 1.5px 6px rgba(60, 64, 67, 0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px 20px 20px;
+      margin-top: 14px;
+      box-sizing: border-box;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #19365c;
+      letter-spacing: -0.7px;
+      margin-bottom: 20px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .list-group {
+      width: 100%;
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #e4e6eb;
+    }
+
+    .list-group-item {
+      background: #f2f4f7;
+      padding: 12px 16px;
+      font-size: 1.1rem;
+      color: #19365c;
+      border-bottom: 1px solid #d7dbdf;
+      text-align: center;
+      word-wrap: break-word;
+    }
+    .list-group-item:last-child {
+      border-bottom: none;
+    }
+    .list-group-item strong {
+      color: #145a96;
+    }
+
+    .alert-danger {
+      width: 100%;
+      padding: 14px 10px;
+      background: #fff0f3;
+      border: 1.5px solid #d7263d;
+      color: #d7263d;
+      border-radius: 7px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 22px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px auto;
+        padding: 18px 4vw 12px 4vw;
+        border-radius: 14px;
+      }
+      .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 24px;
+      }
+      .card {
+        padding: 20px 16px 16px 16px;
+        border-radius: 14px;
+      }
+      button.btn-primary {
+        font-size: 1rem;
+        padding: 10px 16px;
+      }
+      .list-group-item {
+        font-size: 1rem;
+        padding: 10px 12px;
+      }
+      .alert-danger {
+        font-size: 1rem;
+        padding: 12px 8px;
+        border-radius: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-title">Search Donor by Phone Number</div>
+
+    <form method="POST" class="mb-3">
+      <div class="row g-3 align-items-center justify-content-center">
+        <div class="col-12 col-md-7">
+          <input
+            type="text"
+            name="phone_number"
+            class="form-control"
+            placeholder="Enter phone number"
+            required
+          />
+        </div>
+        <div class="col-12 col-md-auto">
+          <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+      </div>
+    </form>
+
+    {% if donor %}
+    <div class="card">
+      <div class="card-title">Donor Details</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Name:</strong> {{ donor.Name }}</li>
+        <li class="list-group-item"><strong>Blood Group:</strong> {{ donor.Blood_Group }}</li>
+        <li class="list-group-item"><strong>Gender:</strong> {{ donor.Gender }}</li>
+        <li class="list-group-item"><strong>Age:</strong> {{ donor.Age }}</li>
+        <li class="list-group-item"><strong>Total Calls Made:</strong> {{ total_calls }}</li>
+      </ul>
+    </div>
+    {% elif searched %}
+    <div class="alert-danger" role="alert">
+      No donor found with that phone number.
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
