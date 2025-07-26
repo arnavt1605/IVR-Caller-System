@@ -61,7 +61,7 @@ def register_donor():
             "Name": name,
             "Age": int(age),
             "Blood_Group": blood_group,
-            "Phone_Number": int(phone),
+            "Phone_Number": phone,
             "DOB": dob,
             "Location": location,
             "Gender" : gender
