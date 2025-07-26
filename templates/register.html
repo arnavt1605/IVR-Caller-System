@@ -143,20 +143,34 @@
     </form>
   </div>
   <script src="/static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js">
+    document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("phone");
+    const prefix = "+91";
 
-    function addCountryCode(){
-        const input = document.getElementById("phone");
-        const prefix = "+91";
-        if (!input.value.startsWith(prefix)) {
-          input.value = prefix;
-        }
-        input.addEventListener("input", () => {
-        if (!input.value.startsWith(prefix)) {
-          input.value = prefix;
-        }
-      });
+    // Set default value if empty or missing prefix
+    if (!input.value.startsWith(prefix)) {
+      input.value = prefix;
     }
-    window.addEventListener("DOMContentLoaded", addCountryCode);
+
+    input.addEventListener("input", () => {
+      // If user deletes prefix, restore it
+      if (!input.value.startsWith(prefix)) {
+        const cursorPos = input.selectionStart;
+        input.value = prefix;
+        input.setSelectionRange(prefix.length, prefix.length); // Move cursor after +91
+      }
+    });
+
+    // Prevent deleting the prefix with backspace
+    input.addEventListener("keydown", (e) => {
+      if (
+        (input.selectionStart <= prefix.length) &&
+        (e.key === "Backspace" || e.key === "Delete")
+      ) {
+        e.preventDefault();
+      }
+    });
+    });
   </script>
 </body>
 </html>
