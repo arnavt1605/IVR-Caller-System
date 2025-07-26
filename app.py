@@ -77,7 +77,12 @@ def register_donor():
 # Thank you page
 @app.route('/thanks')
 def thanks():
-    return render_template('thanks.html')
+    user_agent = request.user_agent.string.lower()
+
+    if "mobile" in user_agent:
+        return render_template("thanks_mobile.html")
+    else:
+        return render_template("thanks_desktop.html")
 
 
 #Supabase auth login remaining to integrate
