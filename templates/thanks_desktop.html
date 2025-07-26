@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You</title>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f6f7fb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .thank-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(60,64,67,.10);
+      padding: 40px 32px 32px 32px;
+      max-width: 500px;
+      width: 100%;
+      border: 1.5px solid #e4e6eb;
+      text-align: center;
+    }
+    .thank-icon {
+      font-size: 3.2rem;
+      margin-bottom: 12px;
+      color: #d7263d;
+      display: inline-block;
+    }
+    .thank-title {
+      color: #d7263d;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .thank-desc {
+      color: #555;
+      font-size: 1.08rem;
+      margin-bottom: 28px;
+    }
+    .btn-solid {
+      background-color: #d7263d;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      border: none;
+      width: 100%;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(215,38,61,0.10);
+      margin-bottom: 10px;
+    }
+    .btn-solid:last-child {
+      margin-bottom: 0;
+    }
+    .btn-solid:hover {
+      background-color: #b71c2b;
+    }
+    .qr-section {
+      margin: 25px 0;
+    }
+    .qr-section img {
+      max-width: 220px;
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      padding: 6px;
+      border-radius: 12px;
+      background-color: #fff;
+    }
+    .qr-desc {
+      font-size: 0.98rem;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="thank-card">
+    <div class="thank-icon">🎉</div>
+    <div class="thank-title">Thank You for Registering!</div>
+    <div class="thank-desc">
+      We're grateful to have you as a part of Sociio Ichor.
+    </div>
+
+    <div class="qr-section">
+      <img src="/static/img/qrcode.jpg" alt="Sociio Ichor Contact QR Code">
+      <div class="qr-desc">
+        Scan this QR code with your phone to instantly save our contact as <strong>Sociio Ichor</strong>. <br>
+        This ensures you'll recognize our calls during critical or urgent requests.
+      </div>
+    </div>
+
+    <a href="/" class="btn btn-solid">Back to Home</a>
+  </div>
+</body>
+</html>
