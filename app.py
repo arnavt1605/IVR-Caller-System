@@ -84,8 +84,7 @@ def thanks():
     else:
         return render_template("thanks_desktop.html")
 
-
-#Supabase auth login remaining to integrate
+# Update: auth logic integrated
 @app.route('/login')
 def login():
     return render_template('login.html', supabase_url=SUPABASE_URL, supabase_anon_key=SUPABASE_ANON_KEY)
@@ -249,7 +248,7 @@ def voice():
     response = f"""<?xml version='1.0' encoding='UTF-8'?>
     <Response>  
         <Gather numDigits="1" action="/process" method="POST">
-            <Play>https://yourdomain.com/static/audio/recording.mp3</Play>
+            <Play>https://ivr-caller-system.onrender.com//static/audio/recording.mp3</Play>
         </Gather>
     </Response>
 """
