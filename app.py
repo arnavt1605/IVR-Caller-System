@@ -159,8 +159,6 @@ def donor_info():
     if request.method == 'POST':
         phone_number = request.form.get('phone_number')
         searched = True
-
-        # Step 1: Find donor by phone number
         donor_response = supabase.table("donors").select("*").eq("Phone_Number", phone_number).execute()
         if donor_response.data:
             donor = donor_response.data[0]
@@ -184,10 +182,10 @@ def call_donors():
 
     # Sorting donors here: never-called first, then by oldest last_called date
     def donor_sort_key(donor):
-        if donor['last_called'] is None:
+        if donor['last_called_at'] is None:
             return (False, datetime.min.isoformat())  # Top priority
         else:
-            return (True, donor['last_called'])  # Later calls
+            return (True, donor['last_called_at'])  # Later calls
 
     eligible_donors = sorted(all_donors, key=donor_sort_key)
 
@@ -217,7 +215,7 @@ def call_donors():
             )
             print(f"[CALL] {donor['Name']} ({blood_group}) at {phone}: {call.sid}")
             supabase.table("donors").update({
-                "last_called": datetime.now(pytz.timezone("Asia/Kolkata")).isoformat()
+                "last_called_at": datetime.now(pytz.timezone("Asia/Kolkata")).isoformat()
             }).eq("Phone_Number", phone).execute()
 
             # Insert call log into the call_logs table
