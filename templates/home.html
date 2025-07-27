@@ -74,19 +74,15 @@
     <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
 
     <h1>Blood Donor IVR System</h1>
-    <p>Connecting hospitals with life-saving donors instantly.</p>
+    <p>Connecting hospitals with life-saving donors.</p>
 
-    <div class="d-grid gap-3">
-      <a href="/login" class="btn btn-outline-danger btn-lg">Admin Login</a>
+    <div class="d-grid gap-3 d-md-flex justify-content-center">
+      <a href="/login" class="btn btn-outline-danger btn-lg me-md-3">Admin Login</a>
       <a href="/register" class="btn btn-danger btn-lg">Donor Registration</a>
     </div>
   </div>
-
   
   <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-
-
   <script>
   // Combining query parameters and hash parameters for a new logic
   function getAllParams() {
