@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* Global box-sizing */
+    
     *, *::before, *::after {
       box-sizing: border-box;
     }
@@ -17,23 +17,20 @@
       padding: 0;
       background: linear-gradient(135deg, #ffe5ec 0%, #f9c6d4 100%);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-      /* Remove flex centering */
       display: block;
 
-      overflow-x: hidden; /* No horizontal scroll */
-      overflow-y: auto;   /* Enable vertical scroll */
+      overflow-x: hidden; 
+      overflow-y: auto;   
     }
 
     body {
       min-height: 100vh;
-      /* no flex centering */
     }
 
     .container {
       max-width: 520px;
       width: 100%;
-      margin: 40px auto; /* margin top & bottom, centered horizontally */
+      margin: 40px auto; 
       padding: 38px 28px 24px 28px;
       background: #fff;
       border-radius: 18px;
