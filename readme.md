@@ -45,4 +45,5 @@
 ### Removed:
 1. Removed cron job script temporarily.
 
-
+### Remaining Work:
+1. Whatsapp message feature integration.
