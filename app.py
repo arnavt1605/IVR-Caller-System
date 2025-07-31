@@ -254,6 +254,23 @@ def voice():
 
 #View donor logs/info needs to be inserted here
 
+# Function for sending message 
+def send_whatsapp_message(to_number, donor_name):
+    message_body = (
+        f"Hi {donor_name}, thank you for confirming your blood donation!\n"
+        f"If you have any medical questions, you can chat with our AI assistant here:\n"
+        f"https://sociioichor.onrender.com/"
+    )
+
+    try:
+        twilio_client.messages.create(
+            from_='whatsapp:+14155238886',  # Replace with your WhatsApp-enabled Twilio number
+            to=f"whatsapp:{to_number}",
+            body=message_body
+        )
+        print(f"[WHATSAPP] Message sent to {donor_name} ({to_number})")
+    except Exception as e:
+        print(f"[ERROR] Failed to send WhatsApp to {to_number}: {e}")
 
 
 #Logic for handling the input by the user
@@ -281,6 +298,8 @@ def process():
             print(f"[CONFIRMED] {donor['Name']} moved to confirmed_donors.")
         else:
             print(f"[WARNING] Donor not found for number: {to_number}")
+
+        send_whatsapp_message(to_number, donor["Name"])
 
     return Response("""<?xml version='1.0' encoding='UTF-8'?><Response><Say>Thank you for your response. Goodbye!</Say></Response>""", mimetype='text/xml')
 
