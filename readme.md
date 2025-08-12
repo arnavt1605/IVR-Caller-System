@@ -43,6 +43,12 @@ Example references:
 | Frontend UI     | Bootstrap       | Quick UI development, responsive |
 | Hosting         | Railway| Simple deployment for Flask apps |
 
+### System Architecture Diagram
+![System Architecture](static/img/system_architecture.png)
+
+### Sequence Diagram
+![Sequence Diagram](static/img/uml_diagram.png)
+
 
 ## Results and Future Work
 ### 1. Current state: 
