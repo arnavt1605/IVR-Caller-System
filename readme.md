@@ -1,49 +1,64 @@
-### Updated Features
-1. Added Gender and Registered_At columns to donors table.
-2. Updated frontend `register.html` with the new columns.
-3. Updated backend for the registration route to handle new column values.
-4. Added Gender row in confirmed_donors table.
-5. Updated `history.html` with the new columns.
-6. Updated app.py routes (all).
-7. Updated `donors.html` and `request.html`.
-8. Added "I don't know" option in blood group selection in `register.html`.
-9. Save Contact button added in `thanks.html`.
-10. Play human voice when called instead of automated voice.
-11. Added reset password code in `reset_password.html`.
-12. Reset password logic working successfully.
-13. Added last_called_at in donors table.
-14. Added the last_called_at columns in `donors.html` as well.
 
-### Files needing updates:
-1. `donors.html`
-2. `register.html`
-3. `history.html`
-4. `request.html`
-5. `app.py` -> `/register_donor` , `/process` , `/finalize_request`
-
-### Make Changes:
-1. Calling logic needs to be changed (WIP).
-2. Integrate whatsapp messaging system along with confirmation.
-3. Upload the cron job file on render.
-4. Add deployment URL to the `/voice` route.
-
-5. Let admin see info about donor from call_logs
+# Interactive Voice Response Calling System
 
 
-### New Calling Logic Idea:
-1. Get all donors of the selected blood group from the donors table.
-2. Prioritize never-called donors first, whose last called date is NULL then go over the remaining entries in ascending order of last called date
-3. Update the last called date to the current called date after calling
-4. Track how many times each donor has been called and limit if needed
 
-### Calling logic implemented:
-1. Prioritize never-called donors first, then by oldest last_called.
-2. Update last_called after calling.
-3. Insert into call_logs table correctly.
-4. Limit to top 10 eligible donors (you can change this if needed).
 
-### Removed:
-1. Removed cron job script temporarily.
+## Table of Contents
 
-### Remaining Work:
-1. Whatsapp message feature integration.
+1. [Abstract](#abstract)
+2. [Objective](#objective)
+3. [Literature Review](#literature-review)
+4. [System Design and Architecture](#system-design-and-architecture)
+5. [Results and Future Work](#results-and-future-work)
+6. [Disclaimer](#disclaimer)
+
+## Abstract
+During emergency medical situations, especially in rural and urban hospitals, finding blood donors of a specific blood group can be time-critical.
+This project automates the donor calling process using an IVR (Interactive Voice Response) system powered by Twilio and integrates a confirmation mechanism for donors via keypad input.
+The system also stores donor details and call history using Supabase, enabling quick and reliable communication during emergencies.
+## Objective
+1. Automate donor notification to reduce response time.
+
+2. Allow donors to confirm availability by pressing a digit on their phone.
+
+3. Provide hospitals with a dashboard to track call status, confirmations, and donor history.
+
+4. Maintain a centralized donor database for quick access.
+## Literature Review
+Example references:
+- **Asterisk Open Source PBX**: Widely used for automated call handling and IVR in both corporate and healthcare sectors.  
+  [Read more](https://www.asterisk.org/)
+- **Twilio IVR for Nonprofits**: Used by NGOs to coordinate volunteers and blood donors during crises.  
+  [Read more](https://www.twilio.org/)
+- **NHS Blood and Transplant UK**: Utilizes automated calling & SMS to reach registered donors quickly.  
+  [Read more](https://www.blood.co.uk/)
+## System Design and Architecture
+
+| Component       | Technology Used | Reason |
+|-----------------|-----------------|--------|
+| Backend         | Flask (Python)  | Lightweight, easy to integrate with APIs |
+| Database        | Supabase        | Serverless, real-time updates |
+| IVR & Calls     | Twilio          | Reliable and easy to integrate with Python|
+| Frontend UI     | Bootstrap       | Quick UI development, responsive |
+| Hosting         | Railway| Simple deployment for Flask apps |
+
+
+## Results and Future Work
+### 1. Current state: 
+Prototype implementation present. No production testing done yet.
+
+### 2. Future Work (non-exhaustive):
+
+a) Add retries & backoff logic for failed calls.
+
+b) Add multilingual IVR messages.
+
+c) Add robust logging, monitoring, and unit/integration tests.
+
+d) Build an official deploy pipeline and secrets management.
+## Disclaimer
+
+> A working version of this product is ready and is currently in the process of being deployed as an integrated package alongside other systems.  
+> No claims are being made at this stage, as the system has not yet been tested in real-world scenarios and may still have certain issues.  
+> The final product will not be a standalone solution but will be incorporated as part of a larger website with additional features.
