@@ -246,7 +246,7 @@ def voice():
     response = f"""<?xml version='1.0' encoding='UTF-8'?>
     <Response>  
         <Gather numDigits="1" action="/process" method="POST">
-            <Play>https://ivr-caller-system.onrender.com//static/audio/recording.mp3</Play>
+            <Play>https://ivr-caller-system.onrender.com//static/audio/ashna_recording.mp3</Play>
         </Gather>
     </Response>
 """
