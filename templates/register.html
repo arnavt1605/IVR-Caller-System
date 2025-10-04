@@ -136,7 +136,11 @@
 
       <div class="form-section">
         <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control" name="location" id="location" required />
+        <select class="form-select" name="location" id="location" required>
+          <option value="" disabled selected>Select your location</option>
+          <option value="Manipal">Manipal</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
 
       <button type="submit" class="btn btn-solid w-100 mt-2">Register</button>
