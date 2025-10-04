@@ -259,12 +259,12 @@ def send_whatsapp_message(to_number, donor_name):
     message_body = (
         f"Hi {donor_name}, thank you for confirming your blood donation!\n"
         f"If you have any medical questions, you can chat with our AI assistant here:\n"
-        f"https://sociioichor.onrender.com/"
+        f"https://sociioichor.onrender.com/"    # NEED TO UPDATE THE URL HERE TOO
     )
 
     try:
         twilio_client.messages.create(
-            from_='whatsapp:+14155238886',  # Replace with your WhatsApp-enabled Twilio number
+            from_='whatsapp:+14155238886',  # Replace with whatsapp number
             to=f"whatsapp:{to_number}",
             body=message_body
         )
