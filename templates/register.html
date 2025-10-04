@@ -126,7 +126,7 @@
 
       <div class="form-section">
         <label for="phone" class="form-label">Phone Number</label>
-        <input type="text" class="form-control" name="phone" id="phone" value="+91" oninput="addCountryCode()" required />
+        <input type="tel" class="form-control" name="phone" id="phone" value="+91" pattern="\+91[0-9]{10}" required />
       </div>
 
       <div class="form-section">
@@ -144,13 +144,6 @@
   </div>
   <script src="/static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js">
     
-    function addCountryCode() {
-      const input = document.getElementById("phone");
-      const prefix = "+91";
-      if (!input.value.startsWith(prefix)) {
-        input.value = prefix;
-      }
-    }
   </script>
 </body>
 </html>
