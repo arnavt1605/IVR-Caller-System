@@ -51,7 +51,7 @@ const donorSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// Unique phone per organization
+// Unique phone number per organization
 donorSchema.index({ organizationId: 1, phone: 1 }, { unique: true });
 
 // Helps donor prioritization
