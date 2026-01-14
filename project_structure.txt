@@ -1,0 +1,84 @@
+server/
+├── src/
+│   ├── app.js              # Express app setup
+│   ├── server.js           # App startup (listen)
+│   │
+│   ├── config/
+│   │   ├── db.js           # MongoDB connection
+│   │   ├── env.js          # Environment variables
+│   │
+│   ├── models/             # Mongoose schemas
+│   │   ├── Organization.js
+│   │   ├── User.js
+│   │   ├── Donor.js
+│   │   ├── CallLog.js
+│   │   ├── RequestHistory.js
+│   │   ├── AppLog.js
+│   │   └── SecurityLog.js
+│   │
+│   ├── routes/             # API routes
+│   │   ├── auth.routes.js
+│   │   ├── donor.routes.js
+│   │   ├── call.routes.js
+│   │   └── history.routes.js
+│   │
+│   ├── controllers/        # Request handlers
+│   │   ├── auth.controller.js
+│   │   ├── donor.controller.js
+│   │   ├── call.controller.js
+│   │   └── history.controller.js
+│   │
+│   ├── middleware/
+│   │   ├── auth.middleware.js    # JWT verification
+│   │   ├── role.middleware.js    # Role checks
+│   │   └── error.middleware.js   # Central error handler
+│   │
+│   ├── services/
+│   │   ├── twilio.service.js     # IVR calling logic
+│   │   └── donor.service.js      # donor selection logic
+│   │
+│   ├── utils/
+│   │   ├── logger.js             # app + security logging helpers
+│   │   └── constants.js
+│   │
+│   └── jobs/
+│       └── callWorker.js         # background calling (optional later)
+│
+├── package.json
+└── .env
+
+
+
+client/
+├── src/
+│   ├── api/                # Axios / fetch wrappers
+│   │   ├── auth.api.js
+│   │   ├── donor.api.js
+│   │   └── call.api.js
+│   │
+│   ├── components/         # Reusable UI pieces
+│   │   ├── Navbar.jsx
+│   │   ├── ProtectedRoute.jsx
+│   │   └── Loader.jsx
+│   │
+│   ├── pages/              # Full pages
+│   │   ├── Login.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── Donors.jsx
+│   │   ├── History.jsx
+│   │   └── Logs.jsx
+│   │
+│   ├── context/
+│   │   └── AuthContext.jsx
+│   │
+│   ├── hooks/
+│   │   └── useAuth.js
+│   │
+│   ├── utils/
+│   │   └── constants.js
+│   │
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── package.json
+└── .env
