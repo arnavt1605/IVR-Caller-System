@@ -1,7 +1,7 @@
 // Helper functions for application and security logging
 
-import AppLog from "../models/AppLog.js";
-import SecurityLog from "../models/SecurityLog.js";
+import AppLog from "../models/applog.js";
+import SecurityLog from "../models/securitylog.js";
 
 export const logAppEvent = async ({ organizationId, level, message, route }) => {
     try {
