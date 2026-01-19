@@ -3,6 +3,7 @@
 import { selectDonorForCall } from "../services/donor.service";
 import CallLog from "../models/calllog";
 import Donor from "../models/donor";
+import { logAAppEvent, logSecurityEvent } from "../utils/logger";
 
 export const triggerCalls = async (req, res) => {
     try {
@@ -14,6 +15,25 @@ export const triggerCalls = async (req, res) => {
         }
 
         const donors = await selectDonorForCall({ organizationId, bloodGroup, limit });
+
+
+        //App log
+        await logAppEvent({
+            organizationId,
+            level: "info",
+            message: `Triggered calls for blood group ${bloodGroup}`,
+            route: req.originalUrl
+        });
+
+        //Security log
+        await logSecurityEvent({
+            organizationId,
+            userId: req.user.id,
+            action: "trigger_calls",
+            ip: req.ip,
+            userAgent: req.headers["user-agent"]
+        });
+
 
         if (donors.length === 0) {
             return res.status(404).json({ message: "No donors found", donorsCalled: 0 })
@@ -48,7 +68,14 @@ export const triggerCalls = async (req, res) => {
 
     }
     catch (error) {
-        console.log(error);
+        // Log the error
+        await logAppEvent({
+            organizationId: req.user?.organizationId,
+            level: "error",
+            message: `Error triggering calls: ${error.message}`,
+            route: req.originalUrl
+        });
+
         return res.status(500).json({ message: "Internal server error" })
     }
 }
