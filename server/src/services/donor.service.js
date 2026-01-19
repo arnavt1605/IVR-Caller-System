@@ -1,6 +1,6 @@
 // Contains business logic for selecting donors for IVR calls
 
-import donor from "../models/donor.js";
+import Donor from "../models/donor.js";
 
 // Select the eligible donors
 export const selectDonorForCall = async ({ organizationId, bloodGroup, limit = 10 }) => {
