@@ -4,6 +4,7 @@ import { selectDonorForCall } from "../services/donor.service";
 import CallLog from "../models/calllog";
 import Donor from "../models/donor";
 import { logAAppEvent, logSecurityEvent } from "../utils/logger";
+import { makeIVRCall } from "../services/twilio.service.js";
 
 export const triggerCalls = async (req, res) => {
     try {
@@ -45,6 +46,12 @@ export const triggerCalls = async (req, res) => {
                 donorId: donor._id,
                 phone: donor.phone,
                 status: "initiated",
+            });
+
+            // Make call using twilio
+            await makeIVRCall({
+                to: donor.phone,
+                callbackURL: `${process.env.BASE_URL}/api/twilio/voice?logId=${log._id}`
             });
 
             await Donor.updateOne(
