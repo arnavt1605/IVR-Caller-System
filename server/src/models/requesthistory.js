@@ -13,6 +13,12 @@ const requestHistorySchema = new mongoose.Schema(
             required: true
         },
 
+        status: {
+            type: String,
+            enum: ["IN_PROGRESS", "COMPLETED"],
+            default: "IN_PROGRESS"
+        },
+
         totalCalls: Number,
         answeredCalls: Number,
         confirmedCount: Number,
