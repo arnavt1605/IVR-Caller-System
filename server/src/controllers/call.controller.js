@@ -3,8 +3,9 @@
 import { selectDonorForCall } from "../services/donor.service";
 import CallLog from "../models/calllog";
 import Donor from "../models/donor";
-import { logAAppEvent, logSecurityEvent } from "../utils/logger";
+import { logAppEvent, logSecurityEvent } from "../utils/logger";
 import { makeIVRCall } from "../services/twilio.service.js";
+import { RequestHistory } from "../models/requesthistory";
 
 export const triggerCalls = async (req, res) => {
     try {
@@ -16,6 +17,14 @@ export const triggerCalls = async (req, res) => {
         }
 
         const donors = await selectDonorForCall({ organizationId, bloodGroup, limit });
+
+        const request = await RequestHistory.create({
+            organizationId,
+            bloodGroup,
+            status: "in_progress",
+        });
+
+        const requestId = request._id;
 
 
         //App log
@@ -43,6 +52,7 @@ export const triggerCalls = async (req, res) => {
         for (const donor of donors) {
             await CallLog.create({
                 organizationId,
+                requestId,
                 donorId: donor._id,
                 phone: donor.phone,
                 status: "initiated",
