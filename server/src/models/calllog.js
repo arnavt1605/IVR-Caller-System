@@ -8,6 +8,12 @@ const callLogSchema = new mongoose.Schema(
             index: true
         },
 
+        requestId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            index: true
+        },
+
         donorId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true
